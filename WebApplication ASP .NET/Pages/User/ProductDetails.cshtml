@@ -1,0 +1,55 @@
+﻿@page
+@model WebApplication_ASP_.NET.Pages.User.ProductDetailsModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Product Details</h1>
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-4">@Model.Product.Name</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <img src=@Model.Product.ImagePath alt="@Model.Product.Name" class="w-full h-auto rounded-lg shadow-lg">
+            </div>
+            <div>
+                <dl class="grid grid-cols-1 gap-4">
+                    <div>
+                        <dt class="font-semibold text-gray-600">Description</dt>
+                        <dd>@Model.Product.Description</dd>
+                    </div>
+                    <div>
+                        <dt class="font-semibold text-gray-600">Category</dt>
+                        <dd>@Model.Product.Category</dd>
+                    </div>
+                    <div>
+                        <dt class="font-semibold text-gray-600">Price</dt>
+                        <dd class="text-lg font-bold text-green-600">@Html.DisplayFor(model => model.Product.Price)</dd>
+                    </div>
+                    <div>
+                        <dt class="font-semibold text-gray-600">Available Quantity</dt>
+                        <dd>@Model.Product.Quantity</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+    </div>
+
+    <form method="post" class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <input name="id" value="@Model.Product.Id" type="hidden" />
+        <div class="mb-4">
+            <label for="quantity" class="block text-gray-700 font-semibold mb-2">Quantity</label>
+            <input type="number" id="quantity" name="quantity" value="1" min="1" max="@Model.Product.Quantity" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            <span asp-validation-for="Product.Quantity" class="text-red-500 text-sm"></span>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Add to Cart
+            </button>
+        </div>
+    </form>
+
+    <div class="text-center">
+        <a href="/User" class="text-blue-500 hover:text-blue-600 font-semibold">Back to Home</a>
+    </div>
+</div>

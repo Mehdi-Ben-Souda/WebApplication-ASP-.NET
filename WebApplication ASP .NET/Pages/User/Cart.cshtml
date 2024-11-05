@@ -1,0 +1,97 @@
+﻿@page
+@model CartModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6">Your Shopping Cart</h1>
+
+    @if (Model.CartItems.Any())
+    {
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Product
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Quantity
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Price
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Subtotal
+                        </th>
+                        <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @foreach (var item in Model.cartLineDTOs)
+                    {
+                        var subtotal = item.Price * item.Quantity;
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        <img class="h-10 w-10 rounded-full" src="@item.image" alt="@item.ProductName">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">
+                                            @item.ProductName
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">@item.Quantity</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">$@item.Price</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">$@subtotal</div>
+                            </td>
+                            <td class="px-6 py-4 bg-gray-50 flex justify-between whitespace-nowrap text-sm font-medium">
+                                <form method="post">
+                                    <input type="hidden" name="productId" value="@item.ProductID" />
+                                    <button type="submit" asp-page-handler="RemoveFromCart" class="text-gray-900  bg-red-200  hover:text-red-600  hover:bg-red-400 p-2 rounded-3 hover:text-red-900 transition duration-150 ease-in-out">
+                                        Remove
+                                    </button>
+                                </form>
+
+                                <a asp-page="ModifyItem" asp-route-id="@item.ProductID" class="text-gray-900  bg-green-200 p-2 rounded-3 hover:text-white hover:bg-green-400 transition duration-150 ease-in-out">
+                                    Modify
+                                </a>
+
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-8 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                Total: $@Model.cartLineDTOs.Sum(item => item.Price * item.Quantity)
+            </div>
+            <a href="/checkout" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out">
+                Proceed to Checkout
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="bg-white shadow-md rounded-lg p-8 text-center">
+            <p class="text-xl text-gray-600">Your cart is empty.</p>
+            <a asp-page="/User" class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-150 ease-in-out">
+                Continue Shopping
+            </a>
+        </div>
+    }
+</div>
